@@ -3,10 +3,10 @@ package mobile;
 import Common.mobile.Base;
 import org.testng.annotations.Test;
 
-public class mobileTest extends Base {
+public class MobileTest extends Base {
 
     @Test
-    public void mobileTest(){
+    public void mobileTest() {
         System.out.println("i am a mobile test");
     }
 }

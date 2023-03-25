@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Appium Tes Suite" parallel="tests" thread-count="2">
+    <listeners>
+        <listener class-name="Common.Helper.Listeners"/>  <!-- the directory of the listeners class in the project-->
+        <listener class-name="Common.Helper.MyTransformer"/> <!-- to implement RetryAnalyzer on Run time  -->
+    </listeners>
+    <!--    <test name="End to end Framework Android Tests">-->
+    <!--        <parameter name="platform" value="Android"></parameter>-->
+    <!--        <parameter name="appPath" value="/src/main/resources/Apps/ApiDemos-debug.apk"></parameter>-->
+    <!--        <classes>-->
+    <!--            <class name="AndroidTests.AndroidKeyEvents">-->
+    <!--            </class>-->
+    <!--        </classes>-->
+    <!--    </test>-->
+    <test name="Mobile Tests">
+        <classes>
+            <class name="mobile.mobileTest">
+            </class>
+        </classes>
+    </test>
+</suite>

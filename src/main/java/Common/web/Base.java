@@ -1,25 +1,21 @@
 package Common.web;
 
 import Common.DriverType;
+import Common.Helper.Properties;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Properties;
 
 public class Base {
 
-    WebDriver driver;
-    Properties properties = new Properties();
+    public WebDriver driver;
 
     @BeforeClass
     public void setUp() throws IOException {
-        FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "/src/main/resources/Config.properties");
-        properties.load(fis);
-        String browserType = properties.getProperty("browserType");
+        String browserType = Properties.getProperty("browserType");
         if (browserType.equalsIgnoreCase("chrome")) {
             driver = DriverType.getChrome();
         } else if (browserType.equalsIgnoreCase("firefox")) {
@@ -34,14 +30,14 @@ public class Base {
     }
 
     @AfterClass
-    public void tearDown(){
+    public void tearDown() {
         driver.manage().deleteAllCookies();
-        if(driver != null) {
+        if (driver != null) {
             driver.quit();
         }
     }
 
-    public void navigateToURL(String url){
+    public void navigateToURL(String url) {
         driver.get(url);
     }
 }
