@@ -33,12 +33,12 @@ public class Base {
     public void startDriver() throws IOException {
         String platform = Properties.getProperty("Platform");
         if (platform.equalsIgnoreCase("Android")) {
-            driver = DriverType.getAndroidDriver(Properties.getProperty("GeneralStoreApkPath"));
+            driver = DriverType.getAndroidDriver(Properties.getProperty("AppiumBasicsApk"));
         } else if (platform.equalsIgnoreCase("IOS")) {
             iosDriver = DriverType.getIosDriver(Properties.getProperty("UIKitCatalogApp"));
-//            IosActions.lunchApp("com.apple.mobileslideshow");
         }
-        System.out.println("Starting " + platform + " driver ... " + "\n" + df.format(new Date()) +
+        System.out.println("Launching the "+platform+" driver ... " +
+                "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
     }
 
@@ -50,7 +50,8 @@ public class Base {
         if (iosDriver != null) {
             iosDriver.quit();
         }
-        System.out.println("Tearing down the driver ... " + "\n" + df.format(new Date()) +
+        System.out.println("Tearing down the driver ... " +
+                "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
     }
 

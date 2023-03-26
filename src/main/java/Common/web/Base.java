@@ -7,12 +7,14 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 
 public class Base {
 
     public WebDriver driver;
-
+    private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @BeforeClass
     public void setUp() throws IOException {
         String browserType = Properties.getProperty("browserType");
@@ -25,6 +27,9 @@ public class Base {
         } else if (browserType.equalsIgnoreCase("safari")) {
             driver = DriverType.getSafari();
         }
+        System.out.println("Launching the "+browserType+" driver ... " +
+                "\n" + df.format(new Date()) +
+                "\n----------------------------------------------------------------");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
@@ -33,12 +38,11 @@ public class Base {
     public void tearDown() {
         driver.manage().deleteAllCookies();
         if (driver != null) {
+            System.out.println("Tearing the driver down ... " +
+                    "\n" + df.format(new Date()) +
+                    "\n----------------------------------------------------------------");
             driver.quit();
         }
-    }
-
-    public void navigateToURL(String url) {
-        driver.get(url);
     }
 }
 

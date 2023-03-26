@@ -20,14 +20,16 @@ public class AppiumUtils {
     public static void startAppiumServer(String ipAddress, int port) {
         service = new AppiumServiceBuilder().withAppiumJS(new File("/usr/local/lib/node_modules/appium/build/lib/main.js"))
                 .withIPAddress(ipAddress).usingPort(port).build();
-        System.out.println("Starting the Appium server on port " + port + "... " + "\n" + df.format(new Date()) +
+        System.out.println("Starting the Appium server on port " + port + "... " +
+                "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
         service.start();
     }
 
     public static void stopAppiumServer() {
         service.stop();
-        System.out.println("Tearing down the Appium server ... " + "\n" + df.format(new Date()) +
+        System.out.println("Tearing the Appium server down... " +
+                "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
     }
 

@@ -51,8 +51,7 @@ public class DriverType {
         options.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
         options.addArguments("--incognito");
         options.addArguments("--lang=es");
-        boolean headless = Boolean.parseBoolean(Properties.getProperty("HeadlessMode"));
-        if (headless) options.addArguments("--headless");
+        if (Boolean.parseBoolean(Properties.getProperty("HeadlessMode"))) options.addArguments("--headless");
         // " https://peter.sh/experiments/chromium-command-line-switches/ " for more arguments references
         return new ChromeDriver(options);
     }
