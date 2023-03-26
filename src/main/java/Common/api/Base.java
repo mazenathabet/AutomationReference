@@ -11,10 +11,10 @@ public class Base {
     public static JsonPath rawToJson(String response){
         return new JsonPath(response);
     }
-    public static RequestSpecification requestSpec (String baseUri, String queryParam1, String queryParam2, ContentType contentType){
+    public static RequestSpecification requestSpec (String baseUri, String queryParam1, String queryParam2, String contentType){
         return  new RequestSpecBuilder().setBaseUri(baseUri).
                 addQueryParam(queryParam1,queryParam2)
-                .setContentType(String.valueOf(contentType)).build();
+                .setContentType(contentType).build();
     }
     public static ResponseSpecification responseSpec(int statusCode, ContentType contentType){
         return new ResponseSpecBuilder().expectStatusCode(statusCode).expectContentType(String.valueOf(contentType)).build();
