@@ -1,13 +1,18 @@
 package Common.web;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class DriverActions {
 
@@ -198,6 +203,66 @@ public class DriverActions {
         ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, " + pixels + ");");
     }
 
+    /**
+     * To get all the page inner Texts
+     */
+    protected String getPageInnerText() {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        String pageText = js.executeScript("return document.documentElement.innerText;").toString();
+        return pageText;
+    }
+
+    /**
+     * To Draw a border around the element
+     */
+    protected void drawBorder(WebElement element) {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("arguments[0].style.border='3px solid red'", element);
+    }
+
+    /**
+     * To Highlight the element with specific color
+     */
+    protected void flash(WebElement element) {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        String bgColor = element.getCssValue("backgroundColor");
+        for (int i = 0; i < 10; i++) {
+            changeColor("rgb(0,200,0)", element);
+            changeColor(bgColor, element);
+        }
+    }
+
+    protected void changeColor(String color, WebElement element) {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("arguments[0].style.backgroundColor = '" + color + "'", element);
+    }
+
+    /**
+     * Refresh the page with JavaScriptExecutor
+     */
+    protected void refreshBrowserByJS() {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("history.go(0)");
+    }
+
+    /**
+     * Get Page title using JavaScriptExecutor
+     */
+    protected String getTitleByJS() {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        String title = js.executeScript("return document.title;").toString();
+        return title;
+    }
+
+    /**
+     * Set Calendar's Date to specific date using JSE
+     */
+    protected void selectDateByJS(WebElement element, String dateVal) {
+        JavascriptExecutor js = ((JavascriptExecutor) driver);
+        js.executeScript("arguments[0].setAttribute('value','" + dateVal + "');", element);
+
+    }
+
     protected void dragElementOverElement(WebElement firstElement, WebElement targetElement) {
         Actions action = new Actions(driver);
         action.dragAndDrop(firstElement, targetElement).perform();
@@ -367,5 +432,24 @@ public class DriverActions {
      */
     protected int getElementsSize(By by) {
         return driver.findElements(by).size();
+    }
+
+    protected void takeScreenShotOfElement(By by) {
+        File image = driver.findElement(by).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(image, new File("src/ScreenShots/elementImage.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    protected void takePageScreenshotAsFile() {
+        File image = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        try {
+            Random random = new Random();
+            Date date = new Date();
+            FileUtils.copyFile(image, new File("src/ScreenShots/pageImage_" + random.nextInt()+date.getTime()+ ".jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

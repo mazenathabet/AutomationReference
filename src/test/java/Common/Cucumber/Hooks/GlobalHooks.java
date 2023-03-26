@@ -1,4 +1,4 @@
-package Common.Cucumber.StepDefinitions.Hooks;
+package Common.Cucumber.Hooks;
 
 import Common.web.Base;
 import io.cucumber.java.After;

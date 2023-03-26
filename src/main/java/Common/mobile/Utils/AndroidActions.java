@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.appmanagement.AndroidInstallApplicationOptions;
 import org.openqa.selenium.DeviceRotation;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -14,8 +16,7 @@ import java.time.Duration;
 
 public class AndroidActions extends AppiumUtils {
 
-    protected static AndroidDriver driver;
-    private static DeviceRotation orientation;
+    private static AndroidDriver driver;
     protected WebDriverWait wait;
 
     public AndroidActions(AndroidDriver driver) {
@@ -38,7 +39,7 @@ public class AndroidActions extends AppiumUtils {
      * percent: The size of the scrollToWebElement as a percentage of the scrolling area size. Valid values must be float numbers greater than zero, where 1.0 is 100%. Mandatory value.
      * speed: The speed at which to perform this gesture in pixels per second. The value must not be negative. The default value is 5000 * displayDensity
      */
-    protected static void scrollToTheEnd(int left, int top, int width, int height, String direction, double percentage) {
+    public static void scrollToTheEnd(int left, int top, int width, int height, String direction, double percentage) {
         boolean canScrollMore;
         do {
             canScrollMore = (Boolean) ((JavascriptExecutor) driver).executeScript("mobile: scrollGesture", ImmutableMap.of(
@@ -49,7 +50,7 @@ public class AndroidActions extends AppiumUtils {
         } while (canScrollMore);
     }
 
-    protected static void scrollToText(String text) {
+    public static void scrollToText(String text) {
         driver.findElement(AppiumBy.androidUIAutomator(String.format("new UiScrollable(new UiSelector()).scrollIntoView(text(\"%s\"));", text)));
     }
 
@@ -66,7 +67,7 @@ public class AndroidActions extends AppiumUtils {
      * Usage examples
      */
 
-    protected static void doubleClickGesture(WebElement element) {
+    public static void doubleClickGesture(WebElement element) {
         ((JavascriptExecutor) driver).executeScript("mobile: doubleClickGesture", ImmutableMap.of(
                 "elementId", ((RemoteWebElement) element).getId()
         ));
@@ -83,7 +84,7 @@ public class AndroidActions extends AppiumUtils {
      *
      * @param element Web Element we want to click
      */
-    protected static void longPressAction(WebElement element, int millisecondsToHold) {
+    public static void longPressAction(WebElement element, int millisecondsToHold) {
         ((JavascriptExecutor) driver).executeScript("mobile: longClickGesture", ImmutableMap.of(
                 "elementId", ((RemoteWebElement) element).getId(),
                 "duration", millisecondsToHold
@@ -101,7 +102,7 @@ public class AndroidActions extends AppiumUtils {
      * Usage examples
      */
 
-    protected static void clickGesture(WebElement element) {
+    public static void clickGesture(WebElement element) {
         driver.executeScript("mobile: clickGesture", ImmutableMap.of(
                 "elementId", ((RemoteWebElement) element).getId()
         ));
@@ -124,7 +125,7 @@ public class AndroidActions extends AppiumUtils {
      * @param element   Web Element we want to swipe
      * @param direction Direction of the swipe
      */
-    protected static void swipeElement(WebElement element, String direction) {
+    public static void swipeElement(WebElement element, String direction) {
         ((JavascriptExecutor) driver).executeScript("mobile: swipeGesture", ImmutableMap.of(
                 "elementId", ((RemoteWebElement) element).getId(),
                 "direction", direction,
@@ -147,7 +148,7 @@ public class AndroidActions extends AppiumUtils {
      *
      * @param element WebElement we want to drag
      */
-    protected static void dragDropElement(WebElement element, int endX, int endY) {
+    public static void dragDropElement(WebElement element, int endX, int endY) {
         ((JavascriptExecutor) driver).executeScript("mobile: dragGesture", ImmutableMap.of(
                 "elementId", ((RemoteWebElement) element).getId(),
                 "endX", endX,
@@ -173,7 +174,7 @@ public class AndroidActions extends AppiumUtils {
      * Usage examples
      */
 
-    protected static void flingGesture(WebElement element, String direction, int pixelsPerSec) {
+    public static void flingGesture(WebElement element, String direction, int pixelsPerSec) {
         boolean canScrollMore = (Boolean) ((JavascriptExecutor) driver).executeScript("mobile: flingGesture", ImmutableMap.of(
                 "elementId", ((RemoteWebElement) element).getId(),
                 "direction", direction,
@@ -195,7 +196,7 @@ public class AndroidActions extends AppiumUtils {
      * speed: The speed at which to perform this gesture in pixels per second. The value must not be negative. The default value is 2500 * displayDensity
      * Usage examples
      */
-    protected static void pinchOpenGesture(WebElement element, int percentage) {
+    public static void pinchOpenGesture(WebElement element, int percentage) {
         ((JavascriptExecutor) driver).executeScript("mobile: pinchOpenGesture", ImmutableMap.of(
                 "elementId", ((RemoteWebElement) element).getId(),
                 "percent", percentage
@@ -216,7 +217,7 @@ public class AndroidActions extends AppiumUtils {
      * speed: The speed at which to perform this gesture in pixels per second. The value must not be negative. The default value is 2500 * displayDensity
      * Usage examples
      */
-    protected static void pinchCloseGesture(WebElement element, int percentage) {
+    public static void pinchCloseGesture(WebElement element, int percentage) {
         ((JavascriptExecutor) driver).executeScript("mobile: pinchCloseGesture", ImmutableMap.of(
                 "elementId", ((RemoteWebElement) element).getId(),
                 "percent", percentage
@@ -242,4 +243,85 @@ public class AndroidActions extends AppiumUtils {
 //            io.appium.android.apis/io.appium.android.apis.preference.PreferenceDependencies
 //            packageName/activityName
     }
+
+
+    public static void terminateApp(AndroidDriver driver, String appPackage) {
+        driver.terminateApp(appPackage);
+    }
+
+    public static void installApp(AndroidDriver driver, String appPath, boolean update) {
+        if (update) {
+            driver.installApp(appPath, new AndroidInstallApplicationOptions().withReplaceEnabled());
+        } else driver.installApp(appPath, new AndroidInstallApplicationOptions().withReplaceDisabled());
+    }
+
+    public static void runAppInBackground(AndroidDriver driver, Duration seconds) {
+        driver.runAppInBackground(seconds);
+    }
+
+    public static void activateApp(AndroidDriver driver, String appPackage) {
+        driver.activateApp(appPackage);
+    }
+
+    public static void rotateScreen(AndroidDriver driver, String deviceOrientation) {
+        if (deviceOrientation.equalsIgnoreCase("landscape")) {
+            driver.rotate(ScreenOrientation.LANDSCAPE);
+        } else if (deviceOrientation.equalsIgnoreCase("portrait")) {
+            driver.rotate(ScreenOrientation.PORTRAIT);
+        } else throw new IllegalArgumentException("Invalid orientation !!");
+    }
+
+    public static void rotateDevice(AndroidDriver driver, int x, int y, int z) {
+        driver.rotate(new DeviceRotation(x, y, z));
+    }
+
+    public static void lockDevice(AndroidDriver driver, int seconds) {
+        driver.lockDevice(Duration.ofSeconds(seconds));
+    }
+
+    public static void lockDevice(AndroidDriver driver) {
+        driver.lockDevice();
+    }
+
+    public static void unlockDevice(AndroidDriver driver) {
+        driver.unlockDevice();
+    }
+
+    // Appium 1.22 Android Actions With touchAction class
+
+//    protected void tabOnElement(WebElement element){
+//        touchAction.tap(TapOptions.tapOptions().withElement(ElementOption.element(element))).perform();
+//    }
+//    protected void tabOnElement(By by ){
+//        touchAction.tap(TapOptions.tapOptions().withElement(ElementOption.element(driver.findElement(by)))).perform();
+//    }
+//
+//    protected void longPressOnElement(By by,long seconds){
+//        touchAction.longPress(ElementOption.element(driver.findElement(by)))
+//                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(seconds)))
+//                .release()
+//                .perform();
+//    }
+//    protected void longPressOnElement(WebElement element,long seconds){
+//        touchAction.longPress(ElementOption.element(element))
+//                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(seconds)))
+//                .release()
+//                .perform();
+//    }
+//
+//    protected void swipeFromToLocation(int startX , int startY,int endX, int endY,long inSeconds){
+//        touchAction.press(PointOption.point(startX,startY))
+//                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(inSeconds)))
+//                .moveTo(PointOption.point(endX,endY))
+//                .release()
+//                .perform();
+//    }
+//
+//    protected void swipeUsingElementsOnScreen(By sourceElement, By targetElement,long inSeconds){
+//        touchAction.press(ElementOption.element(driver.findElement(sourceElement)))
+//                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(inSeconds)))
+//                .moveTo(ElementOption.element(driver.findElement(targetElement)))
+//                .release()
+//                .perform();
+//    }
 }

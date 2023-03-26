@@ -2,6 +2,7 @@ package web;
 
 import Common.web.Base;
 import Common.web.PageObjects.TestPage;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class BrowserTest extends Base {
@@ -11,7 +12,7 @@ public class BrowserTest extends Base {
         TestPage testpage = new TestPage(driver);
         testpage.navigate();
         testpage.search("Appium");
-        System.out.println(driver.getCurrentUrl());
-        System.out.println(driver.getTitle());
+        Assert.assertEquals("Google",driver.getTitle());
+        Assert.assertEquals("https://www.google.com/",driver.getCurrentUrl());
     }
 }

@@ -17,5 +17,6 @@ public class TestPage extends DriverActions {
     public void search(String text) {
         clickOn(driver.findElement(By.name("q")), 5);
         sendKeysToElement(text, driver.findElement(By.name("q")), 3);
+
     }
 }

@@ -13,18 +13,18 @@ import java.io.IOException;
 public class LandingPageStepDef extends Base {
 
     private WebDriver driver;
-    @Given("^As i user i want to launch the browser$")
+    @Given("As i user i want to launch the browser")
     public void openBrowser() throws IOException {
         System.out.println("browser launched");
         driver = DriverType.getChrome();
     }
 
-    @When("^navigating to the landing page$")
+    @When("navigating to the landing page")
     public void navigateToLandingPage(){
         System.out.println("I am on the landing page");
         driver.get("https://www.google.com/");
     }
-    @Then("The landing page is loaded correctly$")
+    @Then("The landing page is loaded correctly")
     public void verifyPageLoaded(){
         System.out.println("page is loaded");
         Assert.assertEquals("Google",driver.getTitle());
