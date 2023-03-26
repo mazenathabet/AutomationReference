@@ -2,6 +2,7 @@ package Common.web;
 
 import Common.DriverType;
 import Common.Helper.Properties;
+import Common.Helper.ThreadLocalConfig;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -13,36 +14,48 @@ import java.util.Date;
 
 public class Base {
 
-    public WebDriver driver;
     private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @BeforeClass
     public void setUp() throws IOException {
+
         String browserType = Properties.getProperty("browserType");
         if (browserType.equalsIgnoreCase("chrome")) {
-            driver = DriverType.getChrome();
+            //get thread-local value
+            ThreadLocalConfig.getThreadLocalDriver().set(DriverType.getChrome());
         } else if (browserType.equalsIgnoreCase("firefox")) {
-            driver = DriverType.getFirefox();
+            //get thread-local value
+            ThreadLocalConfig.getThreadLocalDriver().set(DriverType.getFirefox());
         } else if (browserType.equalsIgnoreCase("edge")) {
-            driver = DriverType.getEdge();
+            //get thread-local value
+            ThreadLocalConfig.getThreadLocalDriver().set(DriverType.getEdge());
         } else if (browserType.equalsIgnoreCase("safari")) {
-            driver = DriverType.getSafari();
+            //get thread-local value
+            ThreadLocalConfig.getThreadLocalDriver().set(DriverType.getSafari());
         }
-        System.out.println("Launching the "+browserType+" driver ... " +
+        System.out.println("Launching the " + browserType + " driver ... " +
                 "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        getDriver().manage().window().maximize();
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+    }
+
+    public static WebDriver getDriver() {
+        return ThreadLocalConfig.getThreadLocalDriver().get();
     }
 
     @AfterClass
     public void tearDown() {
-        driver.manage().deleteAllCookies();
-        if (driver != null) {
-            System.out.println("Tearing the driver down ... " +
-                    "\n" + df.format(new Date()) +
-                    "\n----------------------------------------------------------------");
-            driver.quit();
-        }
+        getDriver().manage().deleteAllCookies();
+        System.out.println("Tearing the driver down ... " +
+                "\n" + df.format(new Date()) +
+                "\n----------------------------------------------------------------");
+        getDriver().quit();
+        //remove thread-local value for the current thread
+        ThreadLocalConfig.getThreadLocalDriver().remove();
+
     }
+
+
 }
 

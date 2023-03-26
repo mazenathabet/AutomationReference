@@ -5,7 +5,7 @@ import Common.web.PageObjects.TestPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class BrowserTest extends Base {
+public class BrowserTest2 extends Base {
 
     @Test
     public void webTest() {
