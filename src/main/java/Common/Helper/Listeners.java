@@ -2,13 +2,12 @@ package Common.Helper;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import io.appium.java_client.AppiumDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
-import static Common.mobile.Utils.AppiumUtils.getScreenshotPath;
 
 
 public class Listeners implements ITestListener {
@@ -19,7 +18,10 @@ public class Listeners implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        test = extentReports.createTest(result.getMethod().getMethodName());
+        test = extentReports.createTest(result.getMethod().getMethodName())
+                .assignAuthor("Mazen")
+                .assignCategory("Demo tests")
+                .assignDevice("Macbook 2019");
     }
 
     @Override
@@ -30,17 +32,7 @@ public class Listeners implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         test.fail(result.getThrowable());
-        try {
-            driver = (AppiumDriver) result.getTestClass().getRealClass().getField("driver").get(result.getInstance());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            test.addScreenCaptureFromPath(getScreenshotPath(result.getName(), driver),
-                    result.getMethod().getMethodName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MediaEntityBuilder.createScreenCaptureFromPath("//Screenshots","img.png").build();
         test.log(Status.FAIL, "Test case " + result.getName() + " has Failed !!");
     }
 
