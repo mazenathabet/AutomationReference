@@ -59,7 +59,7 @@ public class DriverType {
         if (Boolean.parseBoolean(Properties.getProperty("RunLocally"))) {
             driver = new ChromeDriver(options);
         } else {
-            driver = new RemoteWebDriver(new URL("http://www.example.com"), options);
+            driver = new RemoteWebDriver(new URL("http://0.0.0.0:1818/wd/hub"), options);
         }
         return driver;
     }

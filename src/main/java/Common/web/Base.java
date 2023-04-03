@@ -1,10 +1,11 @@
 package Common.web;
 
 import Common.DriverType;
-import Common.Helper.Properties;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -17,9 +18,10 @@ public class Base {
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     @BeforeMethod
-    public void setUp() throws IOException {
+    @Parameters("browserType")
+    public void setUp(@Optional String browserType) throws IOException {
 
-        String browserType = Properties.getProperty("browserType");
+//        String browserType = Properties.getProperty("browserType");
         if (browserType.equalsIgnoreCase("chrome")) {
             //get thread-local value
             driver.set(DriverType.getChrome());

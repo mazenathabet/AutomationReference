@@ -5,7 +5,14 @@
         <listener class-name="Common.Helper.Listeners"/>  <!-- the directory of the listeners class in the project-->
         <listener class-name="Common.Helper.MyTransformer"/> <!-- to implement RetryAnalyzer on Run time  -->
     </listeners>
-    <test name="Test">
+    <test name="chrome test">
+        <parameter name="browserType" value="chrome"/>
+        <classes>
+            <class name="web.ParallelTestingThreadLocal"/>
+        </classes>
+    </test>
+    <test name="firefox test">
+        <parameter name="browserType" value="firefox"/>
         <classes>
             <class name="web.ParallelTestingThreadLocal"/>
         </classes>
