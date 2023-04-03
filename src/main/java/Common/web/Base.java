@@ -17,6 +17,9 @@ public class Base {
     private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
+    public WebDriver getDriver() {
+        return driver.get();
+    }
     @BeforeMethod
     @Parameters("browserType")
     public void setUp(@Optional String browserType) throws IOException {
@@ -38,13 +41,11 @@ public class Base {
         System.out.println("Launching the " + browserType + " driver ... " +
                 "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
-        driver.get().manage().window().maximize();
-        driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        getDriver().manage().window().maximize();
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
 
-    public WebDriver getDriver() {
-        return driver.get();
-    }
+
 
     @AfterMethod
     public void tearDown() {
@@ -54,6 +55,7 @@ public class Base {
                 "\n----------------------------------------------------------------");
         getDriver().quit();
         //remove thread-local value for the current thread
+        driver.remove();
     }
 
 
