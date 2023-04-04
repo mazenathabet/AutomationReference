@@ -26,7 +26,7 @@ steps:
   - task: Maven@3
     displayName: 'Maven pom.xml'
     inputs:
-      mavenPomFile: '$(Parameters.mavenPOMFile)'
+      mavenPomFile: 'pom.xml'
       options: '-P"Web Parallel execution"'
       jdkVersionOption: 1.11
 
