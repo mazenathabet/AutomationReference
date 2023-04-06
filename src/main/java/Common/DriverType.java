@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,7 +59,11 @@ public class DriverType {
         if (Boolean.parseBoolean(Properties.getProperty("HeadlessMode"))) chromeOptions.addArguments("--headless");
         // " https://peter.sh/experiments/chromium-command-line-switches/ " for more arguments references
         if (Boolean.parseBoolean(Properties.getProperty("RunOnGrid"))) {
-            driver = new RemoteWebDriver(new URL("http://192.168.8.115:4444/"), chromeOptions);
+            chromeOptions.setCapability("browserVersion", "112");
+            chromeOptions.setPlatformName("MAC");
+            chromeOptions.setCapability("se:name", "My simple test");
+            chromeOptions.setCapability("se:sampleMetadata", "Sample metadata value");
+            driver = new RemoteWebDriver(new URL("http://localhost:4444"), chromeOptions);
         } else {
             driver = new ChromeDriver(chromeOptions);
         }
@@ -69,7 +74,7 @@ public class DriverType {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         if (Boolean.parseBoolean(Properties.getProperty("HeadlessMode"))) firefoxOptions.addArguments("--headless");
         if (Boolean.parseBoolean(Properties.getProperty("RunOnGrid"))) {
-            driver = new RemoteWebDriver(new URL("http://0.0.0.0:1818/wd/hub"), firefoxOptions);
+            driver = new RemoteWebDriver(new URL("http://localhost:4444"), firefoxOptions);
         } else {
             driver = new FirefoxDriver(firefoxOptions);
         }
@@ -80,7 +85,14 @@ public class DriverType {
         return new EdgeDriver();
     }
 
-    public static WebDriver getSafari(){
-        return new SafariDriver();
+    public static WebDriver getSafari() throws IOException {
+        SafariOptions safariOptions = new SafariOptions();
+        safariOptions.setAcceptInsecureCerts(true);
+        if (Boolean.parseBoolean(Properties.getProperty("RunOnGrid"))) {
+            driver = new RemoteWebDriver(new URL("http://localhost:4444"), safariOptions);
+        } else {
+            driver = new SafariDriver(safariOptions);
+        }
+        return driver;
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Parallel Suite" parallel="methods" thread-count="3">
+<suite name="Parallel Suite" parallel="tests" thread-count="3" >
     <listeners>
         <listener class-name="Common.Helper.Listeners"/>  <!-- the directory of the listeners class in the project-->
         <listener class-name="Common.Helper.MyTransformer"/> <!-- to implement RetryAnalyzer on Run time  -->
@@ -13,6 +13,12 @@
     </test>
     <test name="firefox test">
         <parameter name="browserType" value="firefox"/>
+        <classes>
+            <class name="web.ParallelTestingThreadLocal"/>
+        </classes>
+    </test>
+    <test name="safari test">
+        <parameter name="browserType" value="safari"/>
         <classes>
             <class name="web.ParallelTestingThreadLocal"/>
         </classes>
