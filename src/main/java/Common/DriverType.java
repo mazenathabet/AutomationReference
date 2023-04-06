@@ -12,16 +12,15 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.safari.SafariOptions;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
 
 public class DriverType {
-    private static WebDriver driver;
     public static AndroidDriver getAndroidDriver(String appPath) throws IOException {
         String ipAddress = System.getProperty("ipAddress") != null ? System.getProperty("ipAddress") : Properties.getProperty("ipAddress");
         UiAutomator2Options options = new UiAutomator2Options();
@@ -49,39 +48,34 @@ public class DriverType {
         return driver;
     }
 
-    public static WebDriver getChrome() throws IOException {
-        ChromeOptions options = new ChromeOptions();
-        options.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
-        options.addArguments("--incognito");
-        options.addArguments("--lang=es");
-        if (Boolean.parseBoolean(Properties.getProperty("HeadlessMode"))) options.addArguments("--headless");
-        // " https://peter.sh/experiments/chromium-command-line-switches/ " for more arguments references
-        if (Boolean.parseBoolean(Properties.getProperty("RunLocally"))) {
-            driver = new ChromeDriver(options);
+    public static WebDriver getWebDriver(String browserName) throws IOException {
+        DesiredCapabilities caps = new DesiredCapabilities();
+        WebDriver driver = null;
+        boolean SELENIUM_GRID = Boolean.parseBoolean(Properties.getProperty("RunOnGrid"));
+        boolean HEADLESS_MODE = Boolean.parseBoolean(Properties.getProperty("HeadlessMode"));
+        if (SELENIUM_GRID) {
+            caps.setBrowserName(browserName);
+            driver = new RemoteWebDriver((new URL("http://localhost:4444")), caps);
         } else {
-            driver = new RemoteWebDriver(new URL("http://0.0.0.0:1818/wd/hub"), options);
+            if (browserName.equalsIgnoreCase("chrome")) {
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+                chromeOptions.addArguments("--incognito");
+                chromeOptions.addArguments("--lang=es");
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                if (HEADLESS_MODE) chromeOptions.addArguments("--headless");
+                driver = new ChromeDriver(chromeOptions);
+            } else if (browserName.equalsIgnoreCase("firefox")) {
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                if (HEADLESS_MODE) firefoxOptions.addArguments("--headless");
+                driver = new FirefoxDriver(firefoxOptions);
+            } else if (browserName.equalsIgnoreCase("safari")) {
+                driver = new SafariDriver();
+            } else if (browserName.equalsIgnoreCase("edge")) {
+                return new EdgeDriver();
+            }
         }
         return driver;
     }
 
-    public static WebDriver getFirefox() throws IOException {
-        FirefoxOptions firefoxOptions = new FirefoxOptions();
-        if (Boolean.parseBoolean(Properties.getProperty("HeadlessMode"))) firefoxOptions.addArguments("--headless");
-        if (Boolean.parseBoolean(Properties.getProperty("RunLocally"))) {
-            driver = new FirefoxDriver(firefoxOptions);
-        } else {
-            driver = new RemoteWebDriver(new URL("http://www.example.com"), firefoxOptions);
-        }
-        return driver;
-    }
-
-    public static WebDriver getEdge() {
-        return new EdgeDriver();
-    }
-
-    public static WebDriver getSafari() {
-        SafariOptions safariOptions = new SafariOptions();
-        safariOptions.setAcceptInsecureCerts(true);
-        return new SafariDriver();
-    }
 }

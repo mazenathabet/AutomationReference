@@ -23,21 +23,7 @@ public class Base {
     @BeforeMethod
     @Parameters("browserType")
     public void setUp(@Optional String browserType) throws IOException {
-
-//        String browserType = Properties.getProperty("browserType");
-        if (browserType.equalsIgnoreCase("chrome")) {
-            //get thread-local value
-            driver.set(DriverType.getChrome());
-        } else if (browserType.equalsIgnoreCase("firefox")) {
-            //get thread-local value
-            driver.set(DriverType.getFirefox());
-        } else if (browserType.equalsIgnoreCase("edge")) {
-            //get thread-local value
-            driver.set(DriverType.getEdge());
-        } else if (browserType.equalsIgnoreCase("safari")) {
-            //get thread-local value
-            driver.set(DriverType.getSafari());
-        }
+        driver.set(DriverType.getWebDriver(browserType));
         System.out.println("Launching the " + browserType + " driver ... " +
                 "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
@@ -53,7 +39,9 @@ public class Base {
         System.out.println("Tearing the driver down ... " +
                 "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
-        getDriver().quit();
+        if(getDriver() != null) {
+            getDriver().quit();
+        }
         //remove thread-local value for the current thread
         driver.remove();
     }
