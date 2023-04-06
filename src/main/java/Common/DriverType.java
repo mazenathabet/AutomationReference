@@ -12,7 +12,6 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
@@ -21,6 +20,8 @@ import java.net.URL;
 import java.time.Duration;
 
 public class DriverType {
+
+    static WebDriver driver;
     public static AndroidDriver getAndroidDriver(String appPath) throws IOException {
         String ipAddress = System.getProperty("ipAddress") != null ? System.getProperty("ipAddress") : Properties.getProperty("ipAddress");
         UiAutomator2Options options = new UiAutomator2Options();
@@ -48,34 +49,38 @@ public class DriverType {
         return driver;
     }
 
-    public static WebDriver getWebDriver(String browserName) throws IOException {
-        DesiredCapabilities caps = new DesiredCapabilities();
-        WebDriver driver = null;
-        boolean SELENIUM_GRID = Boolean.parseBoolean(Properties.getProperty("RunOnGrid"));
-        boolean HEADLESS_MODE = Boolean.parseBoolean(Properties.getProperty("HeadlessMode"));
-        if (SELENIUM_GRID) {
-            caps.setBrowserName(browserName);
-            driver = new RemoteWebDriver((new URL("http://localhost:4444")), caps);
+    public static WebDriver getChrome() throws IOException {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+        chromeOptions.addArguments("--incognito");
+        chromeOptions.addArguments("--lang=es");
+        chromeOptions.addArguments("--remote-allow-origins=*");
+        if (Boolean.parseBoolean(Properties.getProperty("HeadlessMode"))) chromeOptions.addArguments("--headless");
+        // " https://peter.sh/experiments/chromium-command-line-switches/ " for more arguments references
+        if (Boolean.parseBoolean(Properties.getProperty("RunOnGrid"))) {
+            driver = new RemoteWebDriver(new URL("http://192.168.8.115:4444/"), chromeOptions);
         } else {
-            if (browserName.equalsIgnoreCase("chrome")) {
-                ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
-                chromeOptions.addArguments("--incognito");
-                chromeOptions.addArguments("--lang=es");
-                chromeOptions.addArguments("--remote-allow-origins=*");
-                if (HEADLESS_MODE) chromeOptions.addArguments("--headless");
-                driver = new ChromeDriver(chromeOptions);
-            } else if (browserName.equalsIgnoreCase("firefox")) {
-                FirefoxOptions firefoxOptions = new FirefoxOptions();
-                if (HEADLESS_MODE) firefoxOptions.addArguments("--headless");
-                driver = new FirefoxDriver(firefoxOptions);
-            } else if (browserName.equalsIgnoreCase("safari")) {
-                driver = new SafariDriver();
-            } else if (browserName.equalsIgnoreCase("edge")) {
-                return new EdgeDriver();
-            }
+            driver = new ChromeDriver(chromeOptions);
         }
         return driver;
     }
 
+    public static WebDriver getFirefox() throws IOException {
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        if (Boolean.parseBoolean(Properties.getProperty("HeadlessMode"))) firefoxOptions.addArguments("--headless");
+        if (Boolean.parseBoolean(Properties.getProperty("RunOnGrid"))) {
+            driver = new RemoteWebDriver(new URL("http://0.0.0.0:1818/wd/hub"), firefoxOptions);
+        } else {
+            driver = new FirefoxDriver(firefoxOptions);
+        }
+        return driver;
+    }
+
+    public static WebDriver getEdge() {
+        return new EdgeDriver();
+    }
+
+    public static WebDriver getSafari(){
+        return new SafariDriver();
+    }
 }

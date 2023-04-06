@@ -16,7 +16,7 @@ public class LandingPageStepDef extends Base {
     @Given("As i user i want to launch the browser")
     public void openBrowser() throws IOException {
         System.out.println("browser launched");
-        driver = DriverType.getWebDriver("chrome");
+        driver = DriverType.getChrome();
     }
 
     @When("navigating to the landing page")
