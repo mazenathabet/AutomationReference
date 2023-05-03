@@ -33,16 +33,16 @@ public class Base {
     public void startDriver() throws IOException {
         String platform = Properties.getProperty("Platform");
         if (platform.equalsIgnoreCase("Android")) {
-            driver = DriverType.getAndroidDriver(Properties.getProperty("AppiumBasicsApk"));
+            driver = DriverType.getAndroidDriver();
         } else if (platform.equalsIgnoreCase("IOS")) {
-            iosDriver = DriverType.getIosDriver(Properties.getProperty("UIKitCatalogApp"));
+            iosDriver = DriverType.getIosDriver();
         }
         System.out.println("Launching the "+platform+" driver ... " +
                 "\n" + df.format(new Date()) +
                 "\n----------------------------------------------------------------");
     }
 
-    @AfterClass(alwaysRun = true)
+    @AfterClass(alwaysRun = true,enabled = false)
     public void tearDownDriver() {
         if (driver != null) {
             driver.quit();
