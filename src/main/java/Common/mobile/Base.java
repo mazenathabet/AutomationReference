@@ -5,10 +5,7 @@ import Common.Helper.Properties;
 import Common.mobile.Utils.AppiumUtils;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.*;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -29,7 +26,7 @@ public class Base {
 
     //@Parameters({"platform", "appPath"})
     //public void startDriver(@Optional String platform, @Optional String appPath) throws IOException {
-    @BeforeClass(alwaysRun = true)
+    @BeforeMethod(alwaysRun = true)
     public void startDriver() throws IOException {
         String platform = Properties.getProperty("Platform");
         if (platform.equalsIgnoreCase("Android")) {
@@ -42,7 +39,7 @@ public class Base {
                 "\n----------------------------------------------------------------");
     }
 
-    @AfterClass(alwaysRun = true,enabled = false)
+    @AfterMethod(alwaysRun = true)
     public void tearDownDriver() {
         if (driver != null) {
             driver.quit();

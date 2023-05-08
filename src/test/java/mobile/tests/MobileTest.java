@@ -1,4 +1,4 @@
-package mobile;
+package mobile.tests;
 
 import Common.mobile.Base;
 import Common.mobile.Utils.AndroidActions;

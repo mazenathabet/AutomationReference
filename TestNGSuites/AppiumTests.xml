@@ -16,7 +16,7 @@
     <!--    </test>-->
     <test name="Mobile Tests">
         <classes>
-            <class name="mobile.MobileTest">
+            <class name="mobile.tests.MobileTest">
             </class>
         </classes>
     </test>

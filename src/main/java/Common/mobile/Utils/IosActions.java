@@ -1,5 +1,6 @@
 package Common.mobile.Utils;
 
+import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
@@ -30,15 +31,14 @@ public class IosActions extends AppiumUtils {
         driver.executeScript("mobile:touchAndHold", params);
     }
 
-    public static void scrollToWebElement(WebElement element, String direction) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("elementId", ((RemoteWebElement) element).getId()); // mandatory
-        params.put("direction", direction); // mandatory down-up
-        driver.executeScript("mobile:scrollToElement", params);
+    public void scrollTo(final String direction) {
+        driver.executeScript("mobile:scroll",
+                ImmutableMap.of("direction",direction)
+        );
     }
 
-    public static void swipe(String direction) {
-        Map<String, Object> params = new HashMap<>();
+    public static void swipe(final String direction) {
+        final Map<String, Object> params = new HashMap<>();
         params.put("direction", direction); // mandatory right, left
         // by default appium swipes to the center of the screen so the target element is not mandatory
         driver.executeScript("mobile:swipe", params);

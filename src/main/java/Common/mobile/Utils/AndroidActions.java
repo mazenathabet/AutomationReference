@@ -28,15 +28,15 @@ public class AndroidActions extends AppiumUtils {
 
     /**
      * mobile: scrollGesture
-     * This gesture performs scrollToWebElement gesture on the given element/area. Available since Appium v1.19
+     * This gesture performs scrollToElement gesture on the given element/area. Available since Appium v1.19
      * Supported arguments
-     * elementId: The id of the element to be scrolled. If the element id is missing then scrollToWebElement bounding area must be provided. If both the element id and the scrollToWebElement bounding area are provided then this area is effectively ignored.
-     * left: The left coordinate of the scrollToWebElement bounding area
-     * top: The top coordinate of the scrollToWebElement bounding area
-     * width: The width of the scrollToWebElement bounding area
-     * height: The height of the scrollToWebElement bounding area
+     * elementId: The id of the element to be scrolled. If the element id is missing then scrollToElement bounding area must be provided. If both the element id and the scrollToElement bounding area are provided then this area is effectively ignored.
+     * left: The left coordinate of the scrollToElement bounding area
+     * top: The top coordinate of the scrollToElement bounding area
+     * width: The width of the scrollToElement bounding area
+     * height: The height of the scrollToElement bounding area
      * direction: Scrolling direction. Mandatory value. Acceptable values are: up, down, left and right (case-insensitive)
-     * percent: The size of the scrollToWebElement as a percentage of the scrolling area size. Valid values must be float numbers greater than zero, where 1.0 is 100%. Mandatory value.
+     * percent: The size of the scrollToElement as a percentage of the scrolling area size. Valid values must be float numbers greater than zero, where 1.0 is 100%. Mandatory value.
      * speed: The speed at which to perform this gesture in pixels per second. The value must not be negative. The default value is 5000 * displayDensity
      */
     public static void scrollToTheEnd(int left, int top, int width, int height, String direction, double percentage) {
@@ -169,7 +169,7 @@ public class AndroidActions extends AppiumUtils {
      * direction: Direction of the fling. Mandatory value. Acceptable values are: up, down, left and right (case-insensitive)
      * speed: The speed at which to perform this gesture in pixels per second. The value must be greater than the minimum fling velocity for the given view (50 by default). The default value is 7500 * displayDensity
      * Returned value
-     * The returned value is a boolean one and equals to true if the object can still scrollToWebElement in the given direction
+     * The returned value is a boolean one and equals to true if the object can still scrollToElement in the given direction
      * <p>
      * Usage examples
      */
